@@ -309,20 +309,24 @@ func cellText(cell string, charLimit int) string {
 		return cell
 	}
 
-	cell = words[0]
-	rem := charLimit - len(cell)
+	var cell strings.Builder
+	cell.WriteString(words[0])
+	rem := charLimit - len(words[0])
 	for _, w := range words[1:] {
 		if c := len(w) + 1; c <= rem {
 			cell += " " + w
+			cell.WriteString(" ")
+			cell.WriteString(w)
 			rem -= c + 1 // including space.
 			continue
 		}
 
-		cell += "\n" + w
+		cell.WriteString("\n")
+		cell.WriteString(w)
 		rem = charLimit - len(w)
 	}
 
-	return cell
+	return cell.String()
 }
 
 func (p *Printer) rowText(row []string) []string {
