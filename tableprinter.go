@@ -304,29 +304,28 @@ func cellText(cell string, charLimit int) string {
 		return cell
 	}
 
-	words := strings.Fields(strings.TrimSpace(cell))
+	words := strings.Fields(cell)
 	if len(words) == 0 {
 		return cell
 	}
 
-	var cell strings.Builder
-	cell.WriteString(words[0])
+	var sb strings.Builder
+	sb.WriteString(words[0])
 	rem := charLimit - len(words[0])
 	for _, w := range words[1:] {
 		if c := len(w) + 1; c <= rem {
-			cell += " " + w
-			cell.WriteString(" ")
-			cell.WriteString(w)
+			sb.WriteString(" ")
+			sb.WriteString(w)
 			rem -= c + 1 // including space.
 			continue
 		}
 
-		cell.WriteString("\n")
-		cell.WriteString(w)
+		sb.WriteString("\n")
+		sb.WriteString(w)
 		rem = charLimit - len(w)
 	}
 
-	return cell.String()
+	return sb.String()
 }
 
 func (p *Printer) rowText(row []string) []string {
@@ -364,8 +363,9 @@ func (p *Printer) RenderRow(row []string, numbersColsPosition []int) int {
 // filters cna be used to control what rows can be visible or hidden.
 // Usage:
 // Print(os.Stdout, values, func(t MyStruct) bool { /* or any type, depends on the type(s) of the "t" */
-// 	return t.Visibility != "hidden"
-// })
+//
+//		return t.Visibility != "hidden"
+//	})
 //
 // Returns the total amount of rows written to the table or
 // -1 if printer was unable to find a matching parser or if headers AND rows were empty.
@@ -376,8 +376,9 @@ func Print(w io.Writer, in interface{}, filters ...interface{}) int {
 // Print outputs whatever "in" value passed as a table, filters can be used to control what rows can be visible and which not.
 // Usage:
 // Print(values, func(t MyStruct) bool { /* or any type, depends on the type(s) of the "t" */
-// 	return t.Visibility != "hidden"
-// })
+//
+//		return t.Visibility != "hidden"
+//	})
 //
 // Returns the total amount of rows written to the table or
 // -1 if printer was unable to find a matching parser or if headers AND rows were empty.
